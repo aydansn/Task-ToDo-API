@@ -1,0 +1,35 @@
+body {
+  background-color: gray;
+  margin: 0;
+  padding: 50px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.heading-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.heading {
+  color: white;
+  font-weight: 700;
+  font-size: 30px;
+}
+
+.list-item-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.right-container,
+.left-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
