@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { getTodoList, removeTodo } from "../api/api";
+import { ReadOutlined, DeleteOutlined } from "@ant-design/icons";
+
 const TodoList = ({ setTodo, setModal }) => {
   const queryClient = useQueryClient();
 
@@ -26,7 +28,7 @@ const TodoList = ({ setTodo, setModal }) => {
   return (
     <ul>
       {data &&
-        data.data.map((todo) => {
+        data.data.reverse().map((todo) => {
           console.log(todo);
           let statusName;
           let statusColorCode;
@@ -37,7 +39,7 @@ const TodoList = ({ setTodo, setModal }) => {
               break;
             case "2":
               statusName = "Active";
-              statusColorCode = "yellow";
+              statusColorCode = "#ffd500";
               break;
             case "3":
               statusName = "Done";
@@ -58,7 +60,7 @@ const TodoList = ({ setTodo, setModal }) => {
                     fontSize: "20px",
                     fontWeight: "600",
                     color: "white",
-                    width: "50px",
+                    width: "100px",
                     padding: "10px",
                     textAlign: "center",
                   }}
@@ -75,10 +77,15 @@ const TodoList = ({ setTodo, setModal }) => {
                   {todo.title}
                 </h3>
               </div>
-              <div className="right-container">
-                <button onClick={() => handleUpdate(todo)}>Update</button>
 
-                <button onClick={() => handleRemove(todo.id)}>Remove</button>
+              <div className="right-container">
+                <div className="raed" onClick={() => handleUpdate(todo)}>
+                  <ReadOutlined className="readicon" />
+                </div>
+
+                <div className="raed" onClick={() => handleRemove(todo.id)}>
+                  <DeleteOutlined className="trushicon" />
+                </div>
               </div>
             </div>
           );

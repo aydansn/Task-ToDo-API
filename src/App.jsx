@@ -2,6 +2,7 @@ import { useState } from "react";
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ArrowLeftOutlined, PlusCircleOutlined } from "@ant-design/icons";
 
 const queryClient = new QueryClient();
 
@@ -16,10 +17,10 @@ function App() {
             <div className="heading-container">
               <h1 className="heading">Todo Form</h1>
               <div className="back-button" onClick={() => setModal(true)}>
-                geri
+                <ArrowLeftOutlined className="click" />
               </div>
             </div>
-            <TodoForm todo={selectedTodo} setTodo={setSelectedTodo} />
+            <TodoForm todo={selectedTodo} setTodo={setSelectedTodo} setModal={setModal} />
           </div>
         )}
         {modal && (
@@ -27,7 +28,7 @@ function App() {
             <div className="heading-container">
               <h1 className="heading">My Todo List</h1>
               <div className="add-button" onClick={() => setModal(false)}>
-                elave et
+                <PlusCircleOutlined className="click" />
               </div>
             </div>
             <TodoList setModal={setModal} setTodo={setSelectedTodo} />

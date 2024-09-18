@@ -2,23 +2,20 @@
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { addTodo, updateTodo, getStatusList } from "../api/api";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-const TodoForm = ({ todo, setTodo }) => {
+const TodoForm = ({ todo, setTodo, setModal }) => {
   const { register, handleSubmit, reset, setValue } = useForm();
   const queryClient = useQueryClient();
   const [statuses, setStatuses] = useState([]);
 
-  useEffect(
-    () => {
-      if (todo) {
-        setValue("title", todo.title);
-        setValue("statusId", todo.statusId);
-        setValue("description", todo.description);
-      }
-    },
-    [todo, setValue]
-  );
+  useEffect(() => {
+    if (todo) {
+      setValue("title", todo.title);
+      setValue("statusId", todo.statusId);
+      setValue("description", todo.description);
+    }
+  }, [todo, setValue]);
 
   useEffect(() => {
     getStatusList().then(({ data }) => setStatuses(data));
@@ -28,7 +25,7 @@ const TodoForm = ({ todo, setTodo }) => {
     onSuccess: () => {
       queryClient.invalidateQueries("todos");
       reset();
-    }
+    },
   });
 
   const mutationUpdate = useMutation(updateTodo, {
@@ -36,32 +33,52 @@ const TodoForm = ({ todo, setTodo }) => {
       queryClient.invalidateQueries("todos");
       reset();
       setTodo(null);
-    }
+    },
   });
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     if (todo) {
       mutationUpdate.mutate({ ...data, id: todo.id });
+      alert(`Task ${todo.id} updated`);
+      setModal(true);
     } else {
       mutationAdd.mutate(data);
+      alert(`Task added`);
+      setModal(true);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("title")} placeholder="Title" required />
-      <select {...register("statusId")} required>
-        {statuses.map(status =>
-          <option key={status.id} value={status.id}>
-            {status.name}
-          </option>
-        )}
-      </select>
-      <textarea {...register("description")} placeholder="Description" />
-      <button type="submit">
-        {todo ? "Update Todo" : "Add Todo"}
-      </button>
-    </form>
+    <Fragment>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h3>Status</h3>
+
+        <select className="titles" {...register("statusId")} required>
+          {statuses.map((status) => (
+            <option key={status.id} value={status.id}>
+              {status.name}
+            </option>
+          ))}
+        </select>
+        <h3>Title</h3>
+        <input
+          className="titles"
+          {...register("title")}
+          placeholder="Develop a Todo app."
+          required
+        />
+        <h3>Description</h3>
+        <textarea
+          className="titles"
+          {...register("description")}
+          placeholder="Description"
+        />
+        <br />
+        <button className="btns" type="submit">
+          {todo ? "Update Todo" : "Submit"}
+        </button>
+      </form>
+    </Fragment>
   );
 };
 
