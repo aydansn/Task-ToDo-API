@@ -25,48 +25,37 @@ const TodoList = ({ setTodo, setModal }) => {
   const handleRemove = (id) => {
     mutationRemove.mutate(id);
   };
+  const statusStyles = (statusId) => {
+    switch (statusId) {
+      case "1":
+        return { backgroundColor: "blue", label: "New" };
+      case "2":
+        return { backgroundColor: "yellow", label: "Active" };
+      case "3":
+        return { backgroundColor: "green", label: "Done" };
+      default:
+        return { backgroundColor: "gray", label: "No Status" };
+    }
+  };
   return (
     <ul>
       {data &&
         data.data.reverse().map((todo) => {
-          console.log(todo);
-          let statusName;
-          let statusColorCode;
-          switch (todo.statusId) {
-            case "1":
-              statusName = "New";
-              statusColorCode = "blue";
-              break;
-            case "2":
-              statusName = "Active";
-              statusColorCode = "#ffd500";
-              break;
-            case "3":
-              statusName = "Done";
-              statusColorCode = "green";
-              break;
+          const { backgroundColor, label } = statusStyles(todo.statusId);
+          const commonStatusStyle = {
+            borderRadius: "6px",
+            fontSize: "20px",
+            fontWeight: "600",
+            color: "white",
+            width: "100px",
+            padding: "10px",
+            textAlign: "center",
+          };
 
-            default:
-              statusName = "No status";
-              statusColorCode = "green";
-          }
           return (
             <div key={todo.id} className="list-item-container">
               <div className="left-container">
-                <p
-                  style={{
-                    backgroundColor: statusColorCode,
-                    borderRadius: "6px",
-                    fontSize: "20px",
-                    fontWeight: "600",
-                    color: "white",
-                    width: "100px",
-                    padding: "10px",
-                    textAlign: "center",
-                  }}
-                >
-                  {statusName}
-                </p>
+                <p style={{ backgroundColor, ...commonStatusStyle }}>{label}</p>
                 <h3
                   style={{
                     fontSize: "20px",
