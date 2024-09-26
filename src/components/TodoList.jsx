@@ -2,10 +2,11 @@
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { getTodoList, removeTodo } from "../api/api";
 import { ReadOutlined, DeleteOutlined } from "@ant-design/icons";
-
-const TodoList = ({ setTodo, setModal }) => {
+import { commonStatusStyle, statusStyles } from "../helper/statusHelpers";
+import { useNavigate } from "react-router-dom";
+const TodoList = ({ setTodo }) => {
   const queryClient = useQueryClient();
-
+  const navigate = useNavigate();
   const { data, isLoading, error } = useQuery("todos", getTodoList);
 
   const mutationRemove = useMutation(removeTodo, {
@@ -19,38 +20,18 @@ const TodoList = ({ setTodo, setModal }) => {
 
   const handleUpdate = (todo) => {
     setTodo(todo);
-    setModal(false);
+    navigate("/form");
   };
 
   const handleRemove = (id) => {
     mutationRemove.mutate(id);
   };
-  const statusStyles = (statusId) => {
-    switch (statusId) {
-      case "1":
-        return { backgroundColor: "blue", label: "New" };
-      case "2":
-        return { backgroundColor: "yellow", label: "Active" };
-      case "3":
-        return { backgroundColor: "green", label: "Done" };
-      default:
-        return { backgroundColor: "gray", label: "No Status" };
-    }
-  };
+
   return (
     <ul>
       {data &&
         data.data.reverse().map((todo) => {
           const { backgroundColor, label } = statusStyles(todo.statusId);
-          const commonStatusStyle = {
-            borderRadius: "6px",
-            fontSize: "20px",
-            fontWeight: "600",
-            color: "white",
-            width: "100px",
-            padding: "10px",
-            textAlign: "center",
-          };
 
           return (
             <div key={todo.id} className="list-item-container">

@@ -89,3 +89,9 @@ body {
     align-items: start;
   }
 }
+
+.back-button,
+.add-button {
+  text-decoration: none;
+  color: #fff;
+}
